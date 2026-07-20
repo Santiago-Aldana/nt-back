@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "maquinas",
+  "info": {
+    "singularName": "maquina",
+    "pluralName": "maquinas",
+    "displayName": "Maquina"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "referenciaActual": {
+      "type": "string",
+      "required": false
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "activa",
+        "detenida",
+        "mantenimiento"
+      ]
+    },
+    "maquinasAsignadas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "maquinasAsignadas"
+    },
+    "tareas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tarea.tarea",
+      "mappedBy": "maquina"
+    },
+    "reportes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reporte.reporte",
+      "mappedBy": "maquina"
+    }
+  }
+}

@@ -441,6 +441,152 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMaquinaMaquina extends Struct.CollectionTypeSchema {
+  collectionName: 'maquinas';
+  info: {
+    displayName: 'Maquina';
+    pluralName: 'maquinas';
+    singularName: 'maquina';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    estado: Schema.Attribute.Enumeration<
+      ['activa', 'detenida', 'mantenimiento']
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::maquina.maquina'
+    > &
+      Schema.Attribute.Private;
+    maquinasAsignadas: Schema.Attribute.Relation<
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    referenciaActual: Schema.Attribute.String;
+    reportes: Schema.Attribute.Relation<'oneToMany', 'api::reporte.reporte'>;
+    tareas: Schema.Attribute.Relation<'oneToMany', 'api::tarea.tarea'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProblemaProblema extends Struct.CollectionTypeSchema {
+  collectionName: 'problemas';
+  info: {
+    displayName: 'Problema';
+    pluralName: 'problemas';
+    singularName: 'problema';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::problema.problema'
+    > &
+      Schema.Attribute.Private;
+    nombre: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    reportes: Schema.Attribute.Relation<'oneToMany', 'api::reporte.reporte'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiReporteReporte extends Struct.CollectionTypeSchema {
+  collectionName: 'reportes';
+  info: {
+    displayName: 'Reporte';
+    pluralName: 'reportes';
+    singularName: 'reporte';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    creadoPor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    detalles: Schema.Attribute.Text & Schema.Attribute.Required;
+    estado: Schema.Attribute.Enumeration<['pendiente', 'solucionado']> &
+      Schema.Attribute.DefaultTo<'pendiente'>;
+    fechaSolucion: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::reporte.reporte'
+    > &
+      Schema.Attribute.Private;
+    maquina: Schema.Attribute.Relation<'manyToOne', 'api::maquina.maquina'>;
+    problema: Schema.Attribute.Relation<'manyToOne', 'api::problema.problema'>;
+    publishedAt: Schema.Attribute.DateTime;
+    solucionadoPor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTareaTarea extends Struct.CollectionTypeSchema {
+  collectionName: 'tareas';
+  info: {
+    displayName: 'Tarea';
+    pluralName: 'tareas';
+    singularName: 'tarea';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    completadoPor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    creadoPor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    estado: Schema.Attribute.Enumeration<['pendiente', 'completada']>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::tarea.tarea'> &
+      Schema.Attribute.Private;
+    maquina: Schema.Attribute.Relation<'manyToOne', 'api::maquina.maquina'>;
+    publishedAt: Schema.Attribute.DateTime;
+    referenciaNueva: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -897,9 +1043,9 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
+    avatar: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -917,6 +1063,10 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    maquinasAsignadas: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::maquina.maquina'
+    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -924,7 +1074,9 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    reportes: Schema.Attribute.Relation<'oneToMany', 'api::reporte.reporte'>;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
+    rol: Schema.Attribute.Enumeration<['administrador', 'operario']>;
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
@@ -952,6 +1104,10 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::maquina.maquina': ApiMaquinaMaquina;
+      'api::problema.problema': ApiProblemaProblema;
+      'api::reporte.reporte': ApiReporteReporte;
+      'api::tarea.tarea': ApiTareaTarea;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

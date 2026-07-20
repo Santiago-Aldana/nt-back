@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "problemas",
+  "info": {
+    "singularName": "problema",
+    "pluralName": "problemas",
+    "displayName": "Problema"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "reportes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reporte.reporte",
+      "mappedBy": "problema"
+    }
+  }
+}

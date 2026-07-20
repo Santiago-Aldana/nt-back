@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tareas",
+  "info": {
+    "singularName": "tarea",
+    "pluralName": "tareas",
+    "displayName": "Tarea"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "referenciaNueva": {
+      "type": "string"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "pendiente",
+        "completada"
+      ]
+    },
+    "maquina": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::maquina.maquina",
+      "inversedBy": "tareas"
+    },
+    "creadoPor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "completadoPor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

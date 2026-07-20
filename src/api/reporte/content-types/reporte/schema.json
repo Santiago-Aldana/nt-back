@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reportes",
+  "info": {
+    "singularName": "reporte",
+    "pluralName": "reportes",
+    "displayName": "Reporte"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "detalles": {
+      "type": "text",
+      "required": true
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "pendiente",
+        "solucionado"
+      ],
+      "default": "pendiente"
+    },
+    "problema": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::problema.problema"
+    },
+    "maquina": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::maquina.maquina"
+    },
+    "creadoPor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "solucionadoPor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "fechaSolucion": {
+      "type": "datetime"
+    }
+  }
+}
